@@ -13,7 +13,7 @@ function(add_subdirectory_checked dir)
 endfunction()
 
 #Options
-option(GLFWPP_BUILD_EXAMPLES "Should examples be built" ON)
+option(GLFWPP_BUILD_EXAMPLES "Should examples be built" OFF)
 
 #Create library target
 add_library(GLFWPP INTERFACE)
