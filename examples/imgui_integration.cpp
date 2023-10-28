@@ -24,11 +24,9 @@ void renderImgui(Func&& guiRenderFunc_)
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    if(ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    if(ImGui::GetIO().ConfigFlags)
     {
         glfw::Window& backupCurrentContext = glfw::getCurrentContext();
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
         glfw::makeContextCurrent(backupCurrentContext);
     }
 }
@@ -40,8 +38,6 @@ void initImgui(const glfw::Window& wnd)
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     ImGuiStyle& style = ImGui::GetStyle();
     style.WindowRounding = 0.0f;
@@ -70,17 +66,15 @@ int main()
 
     initImgui(wnd);
 
-    wnd.keyEvent.setCallback([](glfw::Window&, glfw::KeyCode, int, glfw::KeyState, glfw::ModifierKeyBit) {
-        std::cout << "hi";
-    });
+    wnd.keyEvent.setCallback([](glfw::Window&, glfw::KeyCode, int, glfw::KeyState, glfw::ModifierKeyBit)
+            { std::cout << "hi"; });
 
     while(!wnd.shouldClose())
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        renderImgui([]() {
-            ImGui::ShowDemoWindow();
-        });
+        renderImgui([]()
+                { ImGui::ShowDemoWindow(); });
 
         glfw::pollEvents();
         wnd.swapBuffers();
